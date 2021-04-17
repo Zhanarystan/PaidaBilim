@@ -19,6 +19,14 @@ namespace API.Controllers
             _context = context;
         }
 
+        [HttpPost("adduser")]
+        public async Task<ActionResult<AppUser>> AddUser(AppUser user)
+        {
+            _context.Users.Add(user);
+            await _context.SaveChangesAsync();
+            return user;
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<AppUser>>> GetUsers()
         {
