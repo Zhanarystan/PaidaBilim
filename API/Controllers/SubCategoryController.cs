@@ -28,9 +28,9 @@ namespace API.Controllers
         [HttpGet("{id}")]
         public async Task<SubCategory> GetSubCategory(int id)
         {
-            await _context.Subcategories.Include(s => s.Category).SingleOrDefaultAsync();
-            var category = await _context.Subcategories.FindAsync(id);
-            return category;
+            var subcategory = await _context.Subcategories.FindAsync(id);
+            subcategory.Category = await _context.Categories.FindAsync(subcategory.CategoryId);
+            return subcategory;
         }
 
         [HttpPost("delete/{id}")]

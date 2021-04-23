@@ -1,11 +1,15 @@
 import React,{useState,useEffect} from 'react';
 import {useParams} from 'react-router-dom';
 
-const Content = ({service}) => {
+function Content ({service}) {
     let { topicId } = useParams();
   
     return(
-        <div>{topicId}</div>
+        <div>
+            <div>dasdsa</div>
+            <div>{topicId}</div>
+        </div>
+        
     )
 }
 

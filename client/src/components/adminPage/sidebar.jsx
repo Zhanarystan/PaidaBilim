@@ -15,13 +15,16 @@ const Sidebar = () => {
                     <Link class="nav-link" to={`/admin`}>Users</Link>
                 </li>
                 <li class="nav-item">
-                <Link class="nav-link" to={`${url}/categories`}>Categories</Link>
+                <Link to={`${url}/categories`} class="nav-link">Categories</Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Subcategories</a>
+                    <Link to={`${url}/subcategories`} class="nav-link" href="#">Subcategories</Link>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Courses</a>
+                    <Link to={`${url}/languages`} class="nav-link" href="#">Languages</Link>
+                </li>
+                <li class="nav-item">
+                    <Link to={`${url}/courses`} class="nav-link" href="#">Courses</Link>
                 </li>
             </ul>
         </div>

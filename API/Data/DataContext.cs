@@ -14,6 +14,8 @@ namespace API.Data
 
         public DbSet<Category> Categories {get;set;}
         public DbSet<SubCategory> Subcategories {get;set;}
+        public DbSet<Language> Languages {get;set;}
+        public DbSet<Course> Courses {get;set;}
 
         
     }

@@ -19,7 +19,7 @@ namespace API.Controllers
             _context = context;
         }
 
-        [HttpPost("adduser")]
+        [HttpPost("create")]
         public async Task<ActionResult<AppUser>> AddUser(AppUser user)
         {
             _context.Users.Add(user);
@@ -38,6 +38,13 @@ namespace API.Controllers
         {
             return await _context.Users.FindAsync(id);
         }
+
+        [HttpGet("searchbyusername/{username}")]
+        public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByUsername(string username)
+        {
+            var users = await _context.Users.Where(u => u.UserName.Contains(username)).ToListAsync();
+            return Ok(users);
+        } 
         
     }
 }

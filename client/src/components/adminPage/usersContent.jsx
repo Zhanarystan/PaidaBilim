@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-const UsersContent = ({getData}) => {
+const UsersContent = ({getData, changeInAdminPage}) => {
 
     const [users, setUsers] = useState([]);
     let history = useHistory();
-
+    
     useEffect(() => {
         getData()
         .then((data) => {
           setUsers(data);
         })
-    },[])
+    },[changeInAdminPage]);
     
 
     return (
         <div className="container mt-3">
             <div className="row">
                 <h2 style={{flexGrow:"0.05"}}>Users</h2>
-                <button type='button' class="btn btn-primary" onClick={() => history.push('/create-user') }>
+                <button type='button' class="btn btn-primary" onClick={() => history.push('/admin/users/create') }>
                     ADD NEW
                 </button>
             </div>
