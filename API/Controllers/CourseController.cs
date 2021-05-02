@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using API.Data;
 using API.Entities;
@@ -29,7 +30,8 @@ namespace API.Controllers
         public async Task<Course> GetCourse(int id)
         {
             Course course = await _context.Courses.Include(c => c.LearningSkills)
-                .Include(c => c.Requirements).SingleOrDefaultAsync();
+                .Include(c => c.Requirements).Where(c => c.Id == id).SingleOrDefaultAsync();
+                
             course.Creator = await _context.Users.FindAsync(course.CreatorId);
             course.Language = await _context.Languages.FindAsync(course.LanguageId);
             return course;

@@ -1,7 +1,8 @@
 export default class ApiService {
     
-    constructor(){
+    constructor(jwtToken){
         this._apiBase = 'https://localhost:5001/api'
+        this.jwtToken =jwtToken!==undefined?`Bearer ${jwtToken}`:null;
     }
 
     getResource = async (url) => {
@@ -10,9 +11,10 @@ export default class ApiService {
             method:'GET',
             headers: {
               "Content-Type": "application/json",
-            //   "Authentication": this.jwtToken 
+              "Authorization": this.jwtToken 
             }
         });
+        
 
         if(!res.ok){
             throw new Error(`Could not fetch ${url}` +
@@ -20,6 +22,23 @@ export default class ApiService {
         }
 
         return await res.json();
+    }
+
+    getCurrentUser = async(JwtToken)=>{
+        const bearer = "Bearer "+ JwtToken;
+
+        const response = await fetch("https://localhost:5001/api/profile", {
+            method:'GET',
+            headers: {
+              "Content-Type": "application/json",
+              "Authorization": bearer
+            }
+        });
+
+        if(response.status===200){
+            let res = await response.json();
+            return res;
+        }    
     }
 
     addData = async (data, url) => {

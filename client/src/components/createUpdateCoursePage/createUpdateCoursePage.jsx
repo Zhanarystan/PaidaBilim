@@ -61,8 +61,7 @@ const CreateUpdateCoursePage = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log("testse");
-        console.log(languageId);
+        console.log(creatorId);
         if(props.mode==='edit'){
             const data = {
                 id:courseId,
@@ -141,14 +140,13 @@ const CreateUpdateCoursePage = (props) => {
                             <input className="form-control" value={creator["userName"]} disabled />
                             </>:
                             <>
-                            <input className="form-control" list="found_users" onChange={(e) => {
-                                setCreatorId(e.target.value);
-                            }} />
-                            <datalist id="found_users" >
+                            <select className="form-control"  onChange={(e) => {
+                                setCreatorId(e.target.value)}}>
+                                    <option selected disabled>Select user</option>
                                 {users.map((user) => {
                                     return <option value={user.id}>{user.userName}</option>
                                 })}
-                            </datalist>
+                            </select>
                             </>
                             }
                         </div>
@@ -183,7 +181,7 @@ const CreateUpdateCoursePage = (props) => {
                         <div className="form-group">
                             {props.mode==="edit"?
                             <div style={{width:"300px", height:"150px",marginTop:"30px", marginBottom:"30px"}}>
-                                <img src={courseImage} style={{width: "100%"}} alt="igm" />
+                                <img src={courseImage} style={{width: "100%", height:"100%"}} alt="igm" />
                             </div>
                             :null}
                             <label>Image</label>
