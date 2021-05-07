@@ -10,12 +10,17 @@ namespace API.Data
             
         }
 
+        public DataContext()
+        {
+
+        }
+
         public DbSet<AppUser> Users { get; set; }
 
-        public DbSet<Category> Categories {get;set;}
-        public DbSet<SubCategory> Subcategories {get;set;}
-        public DbSet<Language> Languages {get;set;}
-        public DbSet<Course> Courses {get;set;}
+        public virtual DbSet<Category> Categories {get;set;}
+        public virtual DbSet<SubCategory> Subcategories {get;set;}
+        public virtual DbSet<Language> Languages {get;set;}
+        public virtual DbSet<Course> Courses {get;set;}
 
         
     }

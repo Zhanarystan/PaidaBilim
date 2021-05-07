@@ -21,19 +21,21 @@ namespace API.Controllers
         public async Task<IEnumerable<Category>> GetCategories()
         {
             var categories = await _context.Categories.ToListAsync();
+            
             return categories;
         }
 
         [HttpGet("{id}")]
         public async Task<Category> GetCategory(int id)
         {
-            var category = await _context.Categories.FindAsync(id);
+            Category category = await _context.Categories.FindAsync(id);
             return category;
         }
 
         [HttpPost("delete/{id}")]
         public async Task<int> DeleteCategory(int id)
         {
+            
             var category = await _context.Categories.FindAsync(id);
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
