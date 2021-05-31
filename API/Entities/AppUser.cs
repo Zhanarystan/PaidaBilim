@@ -1,3 +1,6 @@
+using System.Collections.Generic;
+using API.DTO;
+
 namespace API.Entities
 {
     public class AppUser

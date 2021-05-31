@@ -1,5 +1,5 @@
 import React,{useState, useEffect} from 'react';
-import {useHistory} from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 
 const LoginPage = (props) => {
@@ -7,7 +7,10 @@ const LoginPage = (props) => {
     const history = useHistory();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    let location = useLocation();
 
+    let { from } = location.state || { from: { pathname: "/" } };
+    
     const handleSubmit = event =>{
         event.preventDefault();
         const inputData = {email, password};
@@ -31,10 +34,9 @@ const LoginPage = (props) => {
 
         if(response.status===200){
             let jwt = await response.json();
-            
-            props.setCookieJWT('jwt', jwt.token);
-            props.setCurrentUser()
-            history.push("/");
+            localStorage.setItem('currentUser', JSON.stringify(jwt));
+            props.setChangeInAdminPage(jwt);
+            history.replace(from);
             setEmail('');
             setPassword('');
         }

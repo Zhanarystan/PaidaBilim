@@ -39,7 +39,7 @@ const CoursesContent = ({getData, changeInAdminPage}) => {
                                     <th scope="row">{course.id}</th>
                                     <td>{course.title}</td>
                                     <td>{course.price}$</td>
-                                    <td>{course.creator.userName}</td>
+                                    <td>{course.creator.fullName}</td>
                                     <td>{course.studentAmount}</td>
                                     <td><Link to={`/admin/courses/${course.id}`}>Details</Link></td>
                                 </tr>

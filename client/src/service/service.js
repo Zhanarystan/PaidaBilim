@@ -26,7 +26,7 @@ export default class ApiService {
 
     getCurrentUser = async(JwtToken)=>{
         const bearer = "Bearer "+ JwtToken;
-
+        
         const response = await fetch("https://localhost:5001/api/profile", {
             method:'GET',
             headers: {
@@ -37,6 +37,7 @@ export default class ApiService {
 
         if(response.status===200){
             let res = await response.json();
+            console.log(JwtToken);
             return res;
         }    
     }
@@ -84,6 +85,16 @@ export default class ApiService {
         return res;
     }
 
+    getNewestCourses = async() => {
+        const res = await this.getResource('/course/newest_courses');
+        return res;
+    }
+
+    getMyPostedCourses = async (email) => {
+        const res = await this.getResource(`/course/my_posted_courses/${email}`);
+        return res;
+    }
+
     getCategory = async (categoryId) => {
         const res = await this.getResource(`/category/${categoryId}`);
         return res;
@@ -94,8 +105,24 @@ export default class ApiService {
         return res;
     }
 
+    getSubCategoriesByCategory = async(categoryId) => {
+        const res = await this.getResource(`/subcategory/subcategories_by_category_id/${categoryId}`);
+        return res;
+    }
+
     getCourse = async (courseId) => {
         const res = await this.getResource(`/course/${courseId}`);
+        return res;
+    }
+
+    getMyCourses = async (userId) => {
+        const res = await this.getResource(`/course/my_courses/${userId}`);
+
+        return res;
+    }
+
+    getCoursesByCategory = async (categoryId) => {
+        const res = await this.getResource(`/course/search_by_category/${categoryId}`);
         return res;
     }
 
@@ -103,6 +130,7 @@ export default class ApiService {
         const res = await this.getResource('/language');
         return res;
     }
+
 
     getLanguage = async (languageId) => {
         const res = await this.getResource(`/language/${languageId}`);
@@ -114,8 +142,8 @@ export default class ApiService {
         return res; 
     }
 
-    getUserByUsername = async (username) => {
-        const res = await this.getResource(`/users/searchbyusername/${username}`);
+    getUserByEmail = async (email) => {
+        const res = await this.getResource(`/users/get_user_by_email/${email}`);
         return res;
     }
 

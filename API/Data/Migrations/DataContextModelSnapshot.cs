@@ -59,7 +59,7 @@ namespace API.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<int>("CreatorId")
+                    b.Property<int?>("CreatorId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Description")
@@ -68,13 +68,19 @@ namespace API.Data.Migrations
                     b.Property<string>("Image")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("LanguageId")
+                    b.Property<int?>("LanguageId")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("PostedDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<double>("Price")
                         .HasColumnType("REAL");
 
                     b.Property<int>("StudentAmount")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int?>("SubCategoryId")
                         .HasColumnType("INTEGER");
 
                     b.Property<string>("Title")
@@ -86,7 +92,36 @@ namespace API.Data.Migrations
 
                     b.HasIndex("LanguageId");
 
+                    b.HasIndex("SubCategoryId");
+
                     b.ToTable("Courses");
+                });
+
+            modelBuilder.Entity("API.Entities.Enrollment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<double>("Price")
+                        .HasColumnType("REAL");
+
+                    b.Property<DateTime>("PurchasedDate")
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("INTEGER");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Enrolls");
                 });
 
             modelBuilder.Entity("API.Entities.Language", b =>
@@ -160,23 +195,69 @@ namespace API.Data.Migrations
                     b.ToTable("Subcategories");
                 });
 
+            modelBuilder.Entity("API.Entities.Video", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<int>("CourseId")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("PosterUrl")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Url")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CourseId");
+
+                    b.ToTable("videos");
+                });
+
             modelBuilder.Entity("API.Entities.Course", b =>
                 {
                     b.HasOne("API.Entities.AppUser", "Creator")
                         .WithMany()
-                        .HasForeignKey("CreatorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("CreatorId");
 
                     b.HasOne("API.Entities.Language", "Language")
                         .WithMany()
-                        .HasForeignKey("LanguageId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("LanguageId");
+
+                    b.HasOne("API.Entities.SubCategory", "SubCategory")
+                        .WithMany()
+                        .HasForeignKey("SubCategoryId");
 
                     b.Navigation("Creator");
 
                     b.Navigation("Language");
+
+                    b.Navigation("SubCategory");
+                });
+
+            modelBuilder.Entity("API.Entities.Enrollment", b =>
+                {
+                    b.HasOne("API.Entities.Course", "Course")
+                        .WithMany()
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("API.Entities.AppUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Course");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("API.Entities.LearningSkill", b =>
@@ -208,11 +289,22 @@ namespace API.Data.Migrations
                     b.Navigation("Category");
                 });
 
+            modelBuilder.Entity("API.Entities.Video", b =>
+                {
+                    b.HasOne("API.Entities.Course", null)
+                        .WithMany("Videos")
+                        .HasForeignKey("CourseId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("API.Entities.Course", b =>
                 {
                     b.Navigation("LearningSkills");
 
                     b.Navigation("Requirements");
+
+                    b.Navigation("Videos");
                 });
 #pragma warning restore 612, 618
         }

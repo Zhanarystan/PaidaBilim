@@ -5,6 +5,7 @@ using API.Entities;
 using API.DTO;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 
 namespace API.Controllers
 {
@@ -31,6 +32,12 @@ namespace API.Controllers
             var subcategory = await _context.Subcategories.FindAsync(id);
             subcategory.Category = await _context.Categories.FindAsync(subcategory.CategoryId);
             return subcategory;
+        }
+
+        [HttpGet("subcategories_by_category_id/{id}")]
+        public async Task<IEnumerable<SubCategory>> GetSubCategoriesByCategoryId(int id){
+            var subcategories = await _context.Subcategories.Where(s => s.CategoryId == id).ToListAsync();
+            return subcategories;
         }
 
         [HttpPost("delete/{id}")]

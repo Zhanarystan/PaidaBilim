@@ -1,7 +1,48 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import UserContext from '../userContext';
 
-const NavBar = () => {
+const NavBar = (props) => {
+    return(
+        <UserContext.Consumer>
+            {
+                (value) => {
+                    return <Nav currentUser={value}  
+                    setCurrentUser={props.setCurrentUser}/>
+                }
+            }
+        </UserContext.Consumer>
+  )
+}
+
+const Nav = ({currentUser, removeCookieJWT, setCurrentUser}) => {
+    let history =  useHistory();
+
+    const Online = () => {
+    
+        return(
+            <>
+                <Link to='/mycourses' color='inherit' class="nav-link">{currentUser.email}</Link>
+                <Link href='#' color='inherit' class="nav-link"
+                onClick={(e) => {
+                  e.preventDefault();
+                  localStorage.removeItem('currentUser');
+                  setCurrentUser({id:null,email:null,token:null});
+                  history.push("/");
+                  }}
+                >Logout</Link>
+            </>
+        )
+      }
+    
+      const Offline = () => {
+        return(
+            <>
+                <Link to='/login' color='inherit' class="nav-link">Login</Link>
+                <Link to='/register' color='inherit' class="nav-link">Registration</Link>
+            </>
+        )
+      }
 
     return(
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
@@ -34,7 +75,7 @@ const NavBar = () => {
                 </li>
                 
                 </ul>
-                <Link className="nav-link" to="/login">Login</Link>
+                {currentUser.email!==null?<Online/>:<Offline/>}
                 <form className="form-inline my-2 my-lg-0">
                 <input className="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" />
                 <button className="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>

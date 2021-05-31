@@ -22,6 +22,8 @@ namespace API.Data
         public virtual DbSet<Language> Languages {get;set;}
         public virtual DbSet<Course> Courses {get;set;}
 
+        public virtual DbSet<Enrollment> Enrolls {get;set;}
+
         
     }
 }

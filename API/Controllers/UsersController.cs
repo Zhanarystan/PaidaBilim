@@ -39,6 +39,12 @@ namespace API.Controllers
             return await _context.Users.FindAsync(id);
         }
 
+        [HttpGet("get_user_by_email/{email}")]
+        public async Task<ActionResult<AppUser>> GetUserByEmail(string email)
+        {
+            return await _context.Users.Where(u => u.Email == email).SingleOrDefaultAsync();
+        }
+
         // [HttpGet("searchbyusername/{username}")]
         // public async Task<ActionResult<IEnumerable<AppUser>>> GetUserByUsername(string username)
         // {

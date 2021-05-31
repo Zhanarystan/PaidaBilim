@@ -15,11 +15,17 @@ const CreateUpdateCoursePage = (props) => {
 
     const [creator, setCreator] = useState({});
     const [language, setLanguage] = useState({});
+    const [category, setCategory] = useState({});
+    const [subCategory, setSubCategory] = useState({});
     const [creatorId, setCreatorId] = useState(null); //only in creating
     const [languageId, setLanguageId] = useState(null);
+    const [categoryId, setCategoryId] = useState(null);
+    const [subCategoryId, setSubCategoryId] = useState(null);
 
     const [users, setUsers] = useState([]);
     const [languages,setLanguages] = useState([]);
+    const [categories,setCategories] = useState([]);
+    const [subcategories, setSubcategories] = useState([]);
 
 
     const [studentAmount, setStudentAmount] = useState(null);
@@ -28,12 +34,16 @@ const CreateUpdateCoursePage = (props) => {
     const [coursePrice, setCoursePrice] = useState(null);
     const [courseImage, setCourseImage] = useState(null);
     const [courseDescription, setCourseDescription] = useState(null);
-  
+    const [subcategoryFieldDisabled, setSubcategoryFieldDisabled] = useState(true);
 
     useEffect(() => {
         props.service.getAllLanguages()
                 .then((data) => {
                     setLanguages(data);
+                });
+        props.service.getAllCategories()
+                .then((data) => {
+                    setCategories(data);
                 });
         if(props.mode==="edit"){
             props.service.getCourse(Id)
@@ -44,6 +54,7 @@ const CreateUpdateCoursePage = (props) => {
                     setCourseImage(data.image);
                     setCreator(data.creator);
                     setLanguage(data.language);
+                    setSubCategory(data.subCategory)
                     setStudentAmount(data.studentAmount);
                     setCourseDescription(data.description);
                     setLearningSkills(data.learningSkills);
@@ -73,10 +84,13 @@ const CreateUpdateCoursePage = (props) => {
                 creatorId: creator["id"],
                 language,
                 languageId: language["id"],
+                subCategory,
+                subCategoryId: subCategory["id"],
                 learningSkills,
                 requirements,
                 description:courseDescription
                 };
+                console.log(data);
             props.service.addData(data, 'course/update')
                 .then((response) => {
                     props.setChangeInAdminPage(response);
@@ -89,6 +103,7 @@ const CreateUpdateCoursePage = (props) => {
                 price:coursePrice,
                 creatorId,
                 languageId,
+                subCategoryId,
                 learningSkills,
                 requirements,
                 description:courseDescription
@@ -102,6 +117,16 @@ const CreateUpdateCoursePage = (props) => {
         history.push('/admin/courses');
     }
 
+    const handleCategoryChange = (e) => {
+        setCategoryId(e.target.value);
+        
+        props.service.getSubCategoriesByCategory(e.target.value)
+            .then((data) => {
+                setSubcategories(data);
+            });
+
+        setSubcategoryFieldDisabled(false);
+    }
     const handleDelete = () => {
         props.service.addData(courseId, `course/delete/${courseId}`)
                 .then((response) => {
@@ -137,18 +162,55 @@ const CreateUpdateCoursePage = (props) => {
                         <label>Creator Id</label>
                         {props.mode==="edit"?<>
                             
-                            <input className="form-control" value={creator["userName"]} disabled />
+                            <input className="form-control" value={creator["email"]} disabled />
                             </>:
                             <>
                             <select className="form-control"  onChange={(e) => {
                                 setCreatorId(e.target.value)}}>
                                     <option selected disabled>Select user</option>
                                 {users.map((user) => {
-                                    return <option value={user.id}>{user.userName}</option>
+                                    return <option value={user.id}>{user.email}</option>
                                 })}
                             </select>
                             </>
                             }
+                        </div>
+                        <div className="form-group">
+                            <label>Category</label>
+                            <select className="form-control"
+                                defaultValue={categoryId}
+                                onChange={handleCategoryChange}
+                            >
+                                {props.mode==="edit"?
+                                <option value={category.id} selected>{category.categoryName}</option>
+                                :<option selected disabled>Choose Category</option>
+                                }
+                                {categories.map((item) => {
+                                    if(item.id === category.id){
+                                        return;
+                                    }
+                                    return <option value={item.id}>{item.categoryName}</option>
+                                })}
+                            </select>
+                        </div>
+                        <div className="form-group">
+                        <label>Subcategory</label>
+                            <select className="form-control"
+                            defaultValue={subCategoryId}
+                            disabled={subcategoryFieldDisabled} 
+                                onChange={(e) => setSubCategoryId(e.target.value)}
+                            >
+                                {props.mode==="edit"?
+                                <option value={subCategory.id} selected>{subCategory.subCategoryName}</option>
+                                :<option selected disabled>Choose model</option>
+                                }
+                                {subcategories.map((item) => {
+                                    if(subCategory.id===item.id){
+                                        return;
+                                    }
+                                    return <option value={item.id}>{item.subCategoryName}</option>
+                                })}
+                            </select>
                         </div>
                         <div className="form-group">
                             <label>Language</label>
@@ -168,7 +230,7 @@ const CreateUpdateCoursePage = (props) => {
                                 })}
                             </select>
                         </div>
-
+                        
                         <div className="form-group">
                             <label>Price</label>
                             <input 
